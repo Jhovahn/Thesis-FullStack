@@ -1,7 +1,7 @@
 {
   "passport": {
     "Google": {
-      "clientID": "GOOGLE_CLIENT_ID",
+      "clientID": "AIzaSyA3MQSlDVfJb5eC3DqkJAwrPRE5QwHD2cw",
       "clientSecret": "GOOGLE_CLIENT_SECRET",
       "callbackURL": "GOOGLE_CALLBACK_URL"
     },

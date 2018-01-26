@@ -7,9 +7,9 @@
 
   "passport": {
     "Google": {
-      "clientID": "FILL_ME_IN",
-      "clientSecret": "FILL_ME_IN",
-      "callbackURL": "http://FILL_ME_IN/auth/google/callback"
+      "clientID": "572611432890-4i64a69abs02l9b49de4ega78ltjcaru.apps.googleusercontent.com",
+      "clientSecret": "lLMEeieyvaTPvqFBMUamsdq2",
+      "callbackURL": "http://127.0.0.0.1:3000/auth/google/callback"
     },
 
     "Facebook": {
