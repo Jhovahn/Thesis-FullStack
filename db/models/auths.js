@@ -16,7 +16,7 @@ const Auth = db.Model.extend({
             this.set('password', hash);
           })
           .error(err => console.log(err));
-      }
+      }                                                                                                                                                                         
     });
   },
 
