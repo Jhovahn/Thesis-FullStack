@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import css from '../../stylesheet.css'
+// import css from '../../../stylesheet.css'
 
 
 class View extends React.Component {

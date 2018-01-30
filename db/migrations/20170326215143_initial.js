@@ -17,6 +17,16 @@ exports.up = function (knex, Promise) {
       table.string('password', 100).nullable();
       table.string('salt', 100).nullable();
       table.integer('profile_id').references('profiles.id').onDelete('CASCADE');
+    }),
+    knex.schema.createTableIfNotExists('company', function(table) {
+      table.increments('id').unsigned().primary();
+      table.string('company', 40).notNullable()
+    }),
+    knex.schema.createTableIfNotExists('tweets', function(table) {
+     
+    }),
+    knex.schema.createTableIfNotExists('sentiment', function(table) {
+     
     })
   ]);
 };
@@ -24,7 +34,8 @@ exports.up = function (knex, Promise) {
 exports.down = function (knex, Promise) {
   return Promise.all([
     knex.schema.dropTable('auths'),
-    knex.schema.dropTable('profiles')
+    knex.schema.dropTable('profiles'),
+    knex.schema.dropTable('tweets')
   ]);
 };
 
