@@ -1,8 +1,3 @@
-'use strict';
-const express = require('express');
-const router = express.Router();
-const data = require('../index.js')
-
 var dummyData = [ [ 'Anyone interested in watching @bladerunner might I recommend two items from concessions: \n\n1) Gallon of coffee, or… https://t.co/m6Ugu1i9JQ',
 'Wed Jan 31 03:30:20 +0000 2018',
 0 ],
@@ -304,17 +299,43 @@ var dummyData = [ [ 'Anyone interested in watching @bladerunner might I recommen
 'Tue Jan 30 23:22:46 +0000 2018',
 21 ] ]
 
+function format(arr) {
+  return {tweets:arr[0]}
+}
 
-router.route('/')
-  .get((req, res) => {
-    res.status(200).send(dummyData);
-  })
-  .post((req, res) => {
-    console.log('in the correct route');
-    res.status(201).send({ data: 'Posted!' });
-  });
+var load = function() {
+  
 
-console.log(data)
+}
 
-module.exports = router;
 
+
+
+exports.seed = (knex, Promise) => {
+  return knex('tweets').del()
+    .then(() => {
+      let records = dummyData.map(format(data));
+      
+      for (let i = 1; i < dummyData.length; i++) {
+        records.push(format(dummyData[i]))
+      }
+      console.log(records)
+      return Promise.all(records);
+    });
+};
+
+
+
+// exports.seed = function(knex, Promise) {
+//   // Deletes ALL existing entries
+//   return knex('tweets').del()
+//     .then(function () {
+//         let records = dummyData.map(tweet => {id:null, tweets:tweet[0]})
+//       return knex('tweets').insert([
+//         {id:4, company_id: 5, tweets:"six"}
+//         // {id: 1, colName: 'rowValue1'},
+//         // {id: 2, colName: 'rowValue2'},
+//         // {id: 3, colName: 'rowValu  e3'}
+//       ]);
+//     });
+// };

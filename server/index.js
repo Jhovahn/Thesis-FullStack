@@ -18,7 +18,9 @@ const T = new Twitter({
   access_token_secret: config.passport.Twitter.access_token_secret
 });
 
-  console.log(config.passport.Twitter)
+console.log(config.passport.Twitter)
+
+var me = []
 
 var params = {
   q: 'monsterenergy',
@@ -29,14 +31,24 @@ var params = {
 
 T.get('search/tweets', params, function(err,data,response){
   if (!err) {
+    console.log(db)
     console.log('res', JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.retweet_count]))
+    me.push(JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.retweet_count]))
+   
   } else {
     console.log('error',err)
   }
 })
 
 
+app.get('/rando', (request, response) => {
+  console.log("server side",request)
+  res.send('got it :)')
+});
+
+
 app.listen(PORT, () => {
   console.log('Example app listening on port 3000!');
 });
+
 
