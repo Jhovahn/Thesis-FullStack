@@ -46,7 +46,7 @@ const db = require('../../db');
         if (!err) {
           res.status(200).send(JSON.parse(response.body).statuses.map(status => status.text + `\n`))
           console.log('res:', JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.retweet_count]))
-          console.log("database:",db)
+          //console.log("database:",db)
            
          // db.Collection.insert(JSON.parse(response.body).statuses.map(status => status.text))
         //  db.seed(response.body)
