@@ -1,10 +1,10 @@
-const db = require('../')
+// const db = require('../')
 
-const Tweets = db.Model.extend({
-    tableName: 'tweets'
-})
+// const Tweets = db.Model.extend({
+//     tableName: 'tweets'
+// })
 
-module.exports = db.model('tweets', tweets)
+// module.exports = db.model('Tweets', Tweets)
 
 
 
