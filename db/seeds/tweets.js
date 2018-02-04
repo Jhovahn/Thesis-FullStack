@@ -8,13 +8,13 @@ function format(arr) {
 exports.seed = (knex, Promise) => {
   return knex('tweets').del()
     .then(() => {
-      let records = dummyData.map(format(data));
+      // let records = dummyData.map(format(data));
       
-      for (let i = 1; i < dummyData.length; i++) {
-        records.push(format(dummyData[i]))
-      }
-      console.log(records)
-      return Promise.all(records);
+      // for (let i = 1; i < dummyData.length; i++) {
+      //   records.push(format(dummyData[i]))
+      // }
+      // console.log(records)
+      // return Promise.all(records);
     });
 };
 

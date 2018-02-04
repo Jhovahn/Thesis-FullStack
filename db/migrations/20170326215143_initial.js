@@ -23,6 +23,7 @@ exports.up = function (knex, Promise) {
       table.string('company', 40).notNullable();
     }),
     knex.schema.createTableIfNotExists('tweets', function(table) {
+      table.increments('id').unsigned().primary();
       table.string('tweets', 400);
     }),
     knex.schema.createTableIfNotExists('sentiment', function(table) {

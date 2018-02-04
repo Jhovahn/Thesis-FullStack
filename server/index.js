@@ -7,7 +7,7 @@ const Stream = require('user-stream');
 const https = require("https");
 const Twitter = require('twitter');
 const config = require('../config/development.json')
-//const bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 
 // app.use(bodyParser.json())
 

@@ -1,10 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios' 
-//const css = require('./test.css').toString();
-// var server = require('../../../db/index.js')
-
-
 
 
 class View extends React.Component {
@@ -17,7 +13,6 @@ class View extends React.Component {
             database: []
         }
     }
-
 
     getData() {
         axios.get('/api')
@@ -48,7 +43,6 @@ class View extends React.Component {
                 <button onClick={()=> this.accessDatabase()}>Database</button>
                 <h2>{this.state.database}</h2>
                 <h1>{this.state.words}</h1>
-                
             </div>
         )
     }

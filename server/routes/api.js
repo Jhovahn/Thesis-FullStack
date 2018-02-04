@@ -6,13 +6,21 @@ const Twitter = require('twitter');
 const config = require('../../config/development.json')
 const db = require('../../db');
 
-
 // router.route('/')
 //   .get((req, res) => {
 //     res.status(200).send(dummyData);
     
 //   })
- 
+
+
+const Tweet = db.Model.extend({
+  tableName: 'tweets',
+    profile: function() {
+    return this.hasOne(Profile);
+  }
+});
+
+
 
   const T = new Twitter({
     consumer_key: config.passport.Twitter.consumerKey,
@@ -45,11 +53,8 @@ const db = require('../../db');
       T.get('search/tweets', params, function(err,data,response){
         if (!err) {
           res.status(200).send(JSON.parse(response.body).statuses.map(status => status.text + `\n`))
-          console.log('res:', JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.retweet_count]))
-          //console.log("database:",db)
-           
-         // db.Collection.insert(JSON.parse(response.body).statuses.map(status => status.text))
-        //  db.seed(response.body)
+          JSON.parse(response.body).statuses.map(status => new Tweet({tweets:status.text}).save().then(function(model) {
+          }))
         } else {
           console.log('error',err)
         }
