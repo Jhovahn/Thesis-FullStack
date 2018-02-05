@@ -5,12 +5,7 @@ const data = require('../index.js')
 const Twitter = require('twitter');
 const config = require('../../config/development.json')
 const db = require('../../db');
-
-// router.route('/')
-//   .get((req, res) => {
-//     res.status(200).send(dummyData);
-    
-//   })
+var bodyParser = require('body-parser')
 
 
 const Tweet = db.Model.extend({
@@ -19,7 +14,6 @@ const Tweet = db.Model.extend({
     return this.hasOne(Profile);
   }
 });
-
 
 
   const T = new Twitter({
@@ -41,14 +35,24 @@ const Tweet = db.Model.extend({
   }
   
 
-  router.route('/database').get((req, res) => {
-      res.send("yo")
-    }
-  )
+  // router.route('/api/database').get((req,res) => res.status(200).send("database response"))
+  router.route('/api/database/*').get((req,res) => res.status(200).send("database response",params.config.query))
 
-  router.route('/database').get((req,res) => res.status(200).send("database response"))
-      
-    router.route('/')
+  router.route(`/search`).get((req,res) => {
+    console.log("lol:",req.query)
+    //res.status(200).send("yeah")
+    T.get('search/tweets', {q:req.query.query, count: 100}, function(err,data,response) {
+      console.log("run",{q:req.query.query})
+      if (!err) {
+        res.status(200).send(JSON.parse(response.body).statuses.map(status => status.text));
+        console.log(JSON.parse(response.body).statuses.map(status => status.text))
+      } else {
+        console.log('error')
+      }
+    })
+  })
+  
+  router.route('/')
     .get((req, res) => { 
       T.get('search/tweets', params, function(err,data,response){
         if (!err) {

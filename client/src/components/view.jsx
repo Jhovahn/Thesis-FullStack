@@ -2,17 +2,30 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios' 
 
-
 class View extends React.Component {
     constructor(props){
         super(props)
         this.getData = this.getData.bind(this);
-        this.accessDatabase = this.accessDatabase.bind(this);
+        this.getSpecficSearch = this.getSpecficSearch.bind(this);
         this.state = {
             words: [],
-            database: []
+            search:[]
         }
     }
+
+    getSpecficSearch(search) {
+        axios.get(`/api/search/`, {
+            params: {
+              query: `${search}`
+            }
+          })
+            .then(response => {
+                console.log("responsse")
+                this.setState({
+                    search: response.data
+                })
+            }).catch(console.log('error'))
+        }
 
     getData() {
         axios.get('/api')
@@ -20,29 +33,18 @@ class View extends React.Component {
                 this.setState({
                    words: response.data 
                 })
-             //   var arr = this.state.words.map(word => word+'\n')
             }).catch(console.log('error'))
          }
     
-    accessDatabase() {
-        axios.get('/database')
-            .then(response => {
-                this.setState({
-                    database: response
-                })
-            console.log(response)
-        })
-    }
-
-
     render () {
         return (
             <div>
                 <h1 className="title">SentimenTap</h1>
-                <button onClick={()=>{this.getData()}}>Click Me</button>
-                <button onClick={()=> this.accessDatabase()}>Database</button>
-                <h2>{this.state.database}</h2>
-                <h1>{this.state.words}</h1>
+                <button className="btn btn-success" onClick={()=>{this.getData()}}>Click Me</button>
+                <button className="btn btn-success" onClick={()=>{this.getSpecficSearch(document.getElementById('brand').value)}}>Sepcfic Seacch</button>
+                <input className="col-7-lg" type='text' id="brand" style={{color:'blue'}}/>
+                <h3>{this.state.words}</h3> 
+                <h4>{this.state.search}</h4>               
             </div>
         )
     }
