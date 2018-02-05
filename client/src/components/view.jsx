@@ -27,6 +27,7 @@ class View extends React.Component {
             }).catch(console.log('error'))
         }
 
+    // componentWillMount()
     getData() {
         axios.get('/api')
             .then(response => {
@@ -40,11 +41,11 @@ class View extends React.Component {
         return (
             <div>
                 <h1 className="title">SentimenTap</h1>
-                <button className="btn btn-success" onClick={()=>{this.getData()}}>Click Me</button>
-                <button className="btn btn-success" onClick={()=>{this.getSpecficSearch(document.getElementById('brand').value)}}>Sepcfic Seacch</button>
+                {/* <button className="btn btn-success" onClick={()=>{this.getData()}}>Click Me</button> */}
+                <button className="btn btn-success" onClick={()=>{this.getSpecficSearch(document.getElementById('brand').value)}}>SEARCH TWITTER</button>
                 <input className="col-7-lg" type='text' id="brand" style={{color:'blue'}}/>
                 <h3>{this.state.words}</h3> 
-                <h4>{this.state.search}</h4>               
+                <h4>{(this.state.search).map(each => <ul>{each}</ul>)}</h4>               
             </div>
         )
     }

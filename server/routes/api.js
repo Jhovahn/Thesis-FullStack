@@ -39,13 +39,10 @@ const Tweet = db.Model.extend({
   router.route('/api/database/*').get((req,res) => res.status(200).send("database response",params.config.query))
 
   router.route(`/search`).get((req,res) => {
-    console.log("lol:",req.query)
-    //res.status(200).send("yeah")
-    T.get('search/tweets', {q:req.query.query, count: 100}, function(err,data,response) {
-      console.log("run",{q:req.query.query})
+    T.get('search/tweets', {q:req.query.query, count: 100, lang: 'en'}, function(err,data,response) {
       if (!err) {
-        res.status(200).send(JSON.parse(response.body).statuses.map(status => status.text));
-        console.log(JSON.parse(response.body).statuses.map(status => status.text))
+        res.status(200).send(JSON.parse(response.body).statuses.map(status => [`${status.text} | ${status.created_at} | ${status.id} | ${req.query.query}`]));
+        console.log(JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.id, req.query.query]))
       } else {
         console.log('error')
       }
