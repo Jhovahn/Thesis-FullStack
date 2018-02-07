@@ -20,19 +20,17 @@ exports.up = function (knex, Promise) {
     }),
     knex.schema.createTableIfNotExists('company', function(table) {
       table.increments('id').unsigned().primary();
-      table.string('company', 40).references('tweets.company').onDelete('CASCADE')
+      table.string('company', 40).notNullable();
     }),
-    knex.schema.createTableIfNotExists('tweets', function(table) {
+    knex.schema.createTableIfNotExists('tweets', function(table) {  
       table.increments('id').unsigned().primary();
       table.string('tweets', 400);
-      table.string('company', 40).notNullable();
-      table.timestampstz('timestamp')
+      table.timestamps(true, true);
+      table.string('term', 100);
     }),
     knex.schema.createTableIfNotExists('sentiment', function(table) {
       table.integer('company_id', 40)
       table.string('sentiment', 40);
-      table.string('time',40);
-      table.string('company',40).references('tweets.company').onDelete('CASCADE')
     })
   ]);
 };

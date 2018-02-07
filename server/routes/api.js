@@ -6,6 +6,7 @@ const Twitter = require('twitter');
 const config = require('../../config/development.json')
 const db = require('../../db');
 var bodyParser = require('body-parser')
+var sentiment = require('sentiment');
 
 
 const Tweet = db.Model.extend({
@@ -33,16 +34,24 @@ const Tweet = db.Model.extend({
     since: 2017-11-11,
     retweeted: false
   }
-  
 
+  var scent;
+  
   // router.route('/api/database').get((req,res) => res.status(200).send("database response"))
   router.route('/api/database/*').get((req,res) => res.status(200).send("database response",params.config.query))
 
   router.route(`/search`).get((req,res) => {
     T.get('search/tweets', {q:req.query.query, count: 100, lang: 'en'}, function(err,data,response) {
       if (!err) {
-        res.status(200).send(JSON.parse(response.body).statuses.map(status => [`${status.text} | ${status.created_at} | ${status.id} | ${req.query.query}`]));
+        let sentimentNumber = JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score).reduce((a,b) => a + b)/100
+        scent = sentimentNumber
+        console.log("Sentiment Average:",sentimentNumber)
+        res.status(200).send(JSON.parse(response.body).statuses.map(status => [`${status.text}`, `${status.created_at}`, `${status.id}`, `${req.query.query}`, sentimentNumber]));
+        res.send(sentimentNumber)
         console.log(JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.id, req.query.query]))
+        let me = req.query.query
+        JSON.parse(response.body).statuses.map(status => new Tweet({tweets:status.text}, {created_at:status.created_at}, {term:me}).save().then(function(model){}))
+        console.log("Total Sentiment:",JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score).reduce((a,b) => a + b))
       } else {
         console.log('error')
       }
