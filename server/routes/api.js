@@ -7,6 +7,10 @@ const config = require('../../config/development.json')
 const db = require('../../db');
 var bodyParser = require('body-parser')
 var sentiment = require('sentiment');
+var fs = require('fs');
+var path = require('path');
+
+
 
 
 const Tweet = db.Model.extend({
@@ -36,22 +40,38 @@ const Tweet = db.Model.extend({
   }
 
   var scent;
-  
+  var ready;
   // router.route('/api/database').get((req,res) => res.status(200).send("database response"))
   router.route('/api/database/*').get((req,res) => res.status(200).send("database response",params.config.query))
 
   router.route(`/search`).get((req,res) => {
     T.get('search/tweets', {q:req.query.query, count: 100, lang: 'en'}, function(err,data,response) {
       if (!err) {
-        let sentimentNumber = JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score).reduce((a,b) => a + b)/100
+        let sentimentNumber = JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score).reduce((a,b) => a + b,0)/100
         scent = sentimentNumber
         console.log("Sentiment Average:",sentimentNumber)
-        res.status(200).send(JSON.parse(response.body).statuses.map(status => [`${status.text}`, `${status.created_at}`, `${status.id}`, `${req.query.query}`, sentimentNumber]));
-        res.send(sentimentNumber)
+        res.status(200).send(JSON.parse(response.body).statuses.map(status => [`${status.text}`, `${status.created_at}`, `${status.id}`, `${req.query.query}`, `${sentimentNumber ? sentimentNumber : 0}`]));
+      //  res.send(sentimentNumber)
         console.log(JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.id, req.query.query]))
         let me = req.query.query
         JSON.parse(response.body).statuses.map(status => new Tweet({tweets:status.text}, {created_at:status.created_at}, {term:me}).save().then(function(model){}))
         console.log("Total Sentiment:",JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score).reduce((a,b) => a + b))
+        let sa = JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score )
+        let complete = JSON.parse(response.body).statuses.map(status => [`${status.created_at},${sentiment(status.text).score} \n`])
+        fs.unlink(path.join(__dirname, '../../client/src/data.csv'))
+        fs.writeFile(path.join(__dirname, '../../client/src/data.csv'), `message, data \n ${complete}`, function (err) {
+          if (err) throw err;
+          console.log('Updated!');
+        });
+
+        fs.unlink(path.join(__dirname,'../../client/src/data.json'))
+        console.log(JSON.stringify({values:sa}))
+        fs.writeFile(path.join(__dirname,'../../client/src/data.json'), JSON.stringify(sa), function(err){
+          if (err) throw err;
+          console.log('Updated ;)')
+        })
+      
+      
       } else {
         console.log('error')
       }
@@ -74,8 +94,7 @@ const Tweet = db.Model.extend({
       console.log('in the correct route');
       res.status(201).send({ data: 'Posted!' });
     })
-     
-
+  
   // T.get('search/tweets', params, function(err,data,response){
   //   if (!err) {
   //     console.log('res', JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.retweet_count]))
@@ -85,4 +104,5 @@ const Tweet = db.Model.extend({
   // })
  
 module.exports = router;
+exports.ready = ready;
 

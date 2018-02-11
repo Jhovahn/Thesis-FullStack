@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import path from 'path';
+var js_dist = path.join(__dirname, './dist');
 
 const config = {
   entry: './client/src/app',
@@ -19,11 +20,9 @@ const config = {
             }
           }
         ]
-      }
+      },
     ],
   }
 };
-
-
 
 export default config;
