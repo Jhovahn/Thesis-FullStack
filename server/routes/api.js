@@ -50,16 +50,27 @@ const Tweet = db.Model.extend({
         let sentimentNumber = JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score).reduce((a,b) => a + b,0)/100
         scent = sentimentNumber
         console.log("Sentiment Average:",sentimentNumber)
-        res.status(200).send(JSON.parse(response.body).statuses.map(status => [`${status.text}`, `${status.created_at}`, `${status.id}`, `${req.query.query}`, `${sentimentNumber ? sentimentNumber : 0}`]));
+      //  res.status(200).send(JSON.parse(response.body).statuses.map(status => [`${status.text}`, `${status.created_at}`, `${status.id}`, `${req.query.query}`, `${sentimentNumber ? sentimentNumber : 0}`]));
+        res.status(200).send(JSON.parse(response.body).statuses.map(status => [`${status.text} `, `---> Sentiment: ${sentimentNumber ? sentiment(status.text).score : 0}`]));
       //  res.send(sentimentNumber)
         console.log(JSON.parse(response.body).statuses.map(status => [status.text, status.created_at, status.id, req.query.query]))
         let me = req.query.query
         JSON.parse(response.body).statuses.map(status => new Tweet({tweets:status.text}, {created_at:status.created_at}, {term:me}).save().then(function(model){}))
         console.log("Total Sentiment:",JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score).reduce((a,b) => a + b))
         let sa = JSON.parse(response.body).statuses.map(status => sentiment(status.text)).map(score => score.score )
-        let complete = JSON.parse(response.body).statuses.map(status => [`${status.created_at},${sentiment(status.text).score} \n`])
+        let date = JSON.parse(response.body).statuses.map(status => status.created_at)
+        let complete = JSON.parse(response.body).statuses.map(status => `${status.created_at}, ${sentiment(status.text).score}`)
+        let num = 1;
+        let complete1 = JSON.parse(response.body).statuses.map(status => `${num++}\t${sentiment(status.text).score}`)
+        
         fs.unlink(path.join(__dirname, '../../client/src/data.csv'))
-        fs.writeFile(path.join(__dirname, '../../client/src/data.csv'), `message, data \n ${complete}`, function (err) {
+        fs.writeFile(path.join(__dirname, '../../client/src/data.csv'),`name, data\n ${complete.join('\n')}`, function (err) {
+          if (err) throw err;
+          console.log('Updated!');
+        });
+
+        fs.unlink(path.join(__dirname, '../../client/src/data.tsv'))
+        fs.writeFile(path.join(__dirname, '../../client/src/data.tsv'),`name\tvalue\n${complete1.join('\n')}`, function (err) {
           if (err) throw err;
           console.log('Updated!');
         });
@@ -70,8 +81,6 @@ const Tweet = db.Model.extend({
           if (err) throw err;
           console.log('Updated ;)')
         })
-      
-      
       } else {
         console.log('error')
       }
