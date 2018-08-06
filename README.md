@@ -1,6 +1,6 @@
 # SentimentApp
 
-Sentiment analyzer that queries the Twitter API for the last 100 Tweets related to a user supplied keyword and returns an over sentiment.
+Sentiment analyzer that queries the Twitter API for the last 100 Tweets related to a user supplied keyword and returns an overall sentiment.
 
 ## Team
 
