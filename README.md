@@ -1,21 +1,11 @@
-# Project Name
+# SentimentApp
 
-The project description
+Sentiment analyzer that queries the Twitter API for the last 100 Tweets related to a user supplied keyword and returns an over sentiment.
 
 ## Team
 
-- teamMember
-- teamMember
-- teamMember
-- teamMember
+Jhovahn Gibbs
 
-## Roadmap
-
-View the project roadmap [here](LINK_TO_DOC)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 # Table of Contents
 
@@ -27,14 +17,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 ## Usage
 
-> Some usage instructions
+> On the homepage enter a keyword and hit 'SEARCH' button to get sentiment of keyword.
+
 
 ## Requirements
 
 - Node 6.9.x
 - Redis 3.2.x
 - Postgresql 9.6.x
-- etc
 
 ## Development
 
@@ -63,6 +53,7 @@ For environments that require use of environment variables, you can supply varia
 See https://www.npmjs.com/package/config
 And https://github.com/lorenwest/node-config/wiki/Environment-Variables#custom-environment-variables
 
+
 ## Database Initialization
 
 IMPORTANT: ensure `postgres` is running before performing these steps.
@@ -74,6 +65,7 @@ Use grunt to create a new database for your development and test environments:
 Development envronment: `grunt pgcreatedb:default`
 
 Other environments, specify like so: `NODE_ENV=test grunt pgcreatedb:default`
+
 
 ### Run Migrations & Data Seeds
 
